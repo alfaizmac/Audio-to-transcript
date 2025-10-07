@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP3 Transcriber</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 MP3 to Text Transcriber</h1>
+        <p>Upload an MP3 file and get the transcript instantly!</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-content">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p>Drag & drop your MP3 file here</p>
+                <p class="small">or</p>
+                <input type="file" id="audioFile" accept=".mp3,.wav,.m4a" hidden>
+                <button type="button" onclick="document.getElementById('audioFile').click()">
+                    Choose File
+                </button>
+                <p class="file-info" id="fileInfo"></p>
+            </div>
+        </div>
+
+        <button type="button" id="transcribeBtn" disabled onclick="transcribeAudio()">
+            Start Transcription
+        </button>
+
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Transcribing audio... This may take a moment.</p>
+        </div>
+
+        <div class="result" id="result" style="display: none;">
+            <h3>Transcript:</h3>
+            <div class="transcript" id="transcript"></div>
+            <button type="button" onclick="copyTranscript()" class="copy-btn">
+                Copy to Clipboard
+            </button>
+        </div>
+
+        <div class="error" id="error" style="display: none;"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
