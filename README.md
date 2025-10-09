@@ -61,7 +61,7 @@ Open WSL Ubuntu
 ```
 # Navigate to your project
 
-cd "/mnt/a/mp3-transcriber"
+cd "/mnt/a/Q2Q technologies Video Editing/mp3-transcriber"
 
 # Create virtual environment (if doesn't exist)
 
