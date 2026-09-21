@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP3 Transcriber</title>
+    <title>Audio Transcriber with Language Selection</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>🎵 MP3 to Text Transcriber</h1>
-        <p>Upload an MP3 file and get the transcript instantly!</p>
+        <h1>🎤 Audio Transcriber with Language Selection</h1>
+        <p>Upload audio files and get transcriptions with timestamps and language support</p>
         
         <div class="upload-area" id="uploadArea">
             <div class="upload-content">
@@ -18,9 +18,9 @@
                     <polyline points="17 8 12 3 7 8"></polyline>
                     <line x1="12" y1="3" x2="12" y2="15"></line>
                 </svg>
-                <p>Drag & drop your MP3 file here</p>
+                <p>Drag & drop your audio file here</p>
                 <p class="small">or</p>
-                <input type="file" id="audioFile" accept=".mp3,.wav,.m4a" hidden>
+                <input type="file" id="audioFile" accept=".mp3,.wav,.m4a,.mp4,.m4v,.webm" hidden>
                 <button type="button" onclick="document.getElementById('audioFile').click()">
                     Choose File
                 </button>
@@ -28,9 +28,50 @@
             </div>
         </div>
 
-        <button type="button" id="transcribeBtn" disabled onclick="transcribeAudio()">
-            Start Transcription
-        </button>
+        <div class="settings-section">
+            <h3>⚙️ Transcription Settings</h3>
+            
+            <div class="setting-row">
+                <label for="languageSelect">Select Language:</label>
+                <select id="languageSelect">
+                    <option value="auto">Auto Detect</option>
+                    {% for code, name in languages.items() %}
+                    <option value="{{ code }}">{{ name }} ({{ code }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="setting-row">
+                <label for="taskSelect">Task:</label>
+                <select id="taskSelect">
+                    <option value="transcribe">Transcribe</option>
+                    <option value="translate">Translate to English</option>
+                </select>
+            </div>
+            
+            <div class="setting-row">
+                <label>Output Format:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="outputFormat" value="with_timestamps" checked>
+                        With Timestamps
+                    </label>
+                    <label>
+                        <input type="radio" name="outputFormat" value="plain_text">
+                        Plain Text
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button type="button" id="transcribeBtn" disabled onclick="transcribeAudio()">
+                🎬 Start Transcription
+            </button>
+            <button type="button" onclick="resetForm()" class="secondary-btn">
+                🔄 Reset
+            </button>
+        </div>
 
         <div class="loading" id="loading" style="display: none;">
             <div class="spinner"></div>
@@ -38,11 +79,19 @@
         </div>
 
         <div class="result" id="result" style="display: none;">
-            <h3>Transcript:</h3>
+            <div class="result-header">
+                <h3>📝 Transcription Result</h3>
+                <div class="result-info" id="resultInfo"></div>
+            </div>
             <div class="transcript" id="transcript"></div>
-            <button type="button" onclick="copyTranscript()" class="copy-btn">
-                Copy to Clipboard
-            </button>
+            <div class="result-actions">
+                <button type="button" onclick="copyTranscript()" class="copy-btn">
+                    📋 Copy to Clipboard
+                </button>
+                <button type="button" onclick="downloadTranscript()" class="download-btn">
+                    ⬇️ Download Transcript
+                </button>
+            </div>
         </div>
 
         <div class="error" id="error" style="display: none;"></div>
